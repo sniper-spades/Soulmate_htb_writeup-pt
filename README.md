@@ -3,13 +3,13 @@
 ---
 
 # Deliverable1:
-
-# https://app.hackthebox.com/public/users/2064724
-
-# https://app.hackthebox.com/machines/Soulmate
+# My Profile:
+## https://app.hackthebox.com/public/users/2064724
+# The Active Machine:
+## https://app.hackthebox.com/machines/Soulmate
 
 # Deliverable2:
-![Screenshot 2026-02-05 140218.png](image/Screenshot_2026-02-05_140218.png)
+![Screenshot 2026-02-05 140218.png](image/solved.png)
 
 ---
 
@@ -19,19 +19,19 @@
 
    starting with connection with VPN network by given OpenVPN credential file and gain access to it locally , then start reconnaissance with given IP by Nmap scan. the Nmap scan shows there are  2 ports open **{SSH via 22 , HTTP via 80}** and URL for **HTTP** server **{ http://soulmate.htb/}** and basic details as the used IP OS Ubuntu .
 
-![Screenshot 2026-02-01 141357.png](attachment:33fe3639-a2ae-4f34-ba10-4cebaedf6ddb:Screenshot_2026-02-01_141357.png)
+![Screenshot 2026-02-01 141357.png](image/nmap.png)
 
  while i use local connection assuming the URL with target IP manually into **“/etc/hosts”** because the traffic wasn't resolved via DNS.
 
-![image.png](attachment:afc08133-830b-413d-8dc9-75606de4ca53:image.png)
+![image.png](image/etc-hosts.png)
 
    open the http website and try to scan it **manually** then by using **“burp suite”** but its have a so many website so go to scan it by tool as **“Go buster”**.  the result showed couple of pages and anther URL **{[ftp.soulmate.htb](http://ftp.soulmate.htb/)}** and this contain only login page so start with it. I haven't credential to try to capture any.
 
-![image.png](attachment:a2a5b8f9-ffeb-4207-ae13-2df184554164:image.png)
+![image.png](image/gobaster.png)
 
    the HTTP header for **{[ftp.soulmate.htb](http://ftp.soulmate.htb/)}** contained **CrushFTP** version 11 and the date is 3/8/2025 the same date and version for the **{CVE-2025-31161}** . this vulnerability happens when the CrushFTP as file transfer server takes user request with Authorization via Cookies and aws as a request-signing authentication and its necessary for CrushFTP server to be compatible with other services from aws.
 
-![image.png](attachment:0f27fbf7-1467-4d84-9733-34ebf5a002f5:f8b9c813-19fd-4cc7-b166-483da29e8819.png)
+![image.png](image/burp.png)
 
     this CrushFTP vulnerability hade **multi-threaded race condition** first one validates the session/credentials as **"crushadmin"** so while crushadmin always exist in the data base and at the same time other one go to verified for signature and here were a **Time-of-check to time-of-use (TOCTOU) window** for waiting the second thread response so the attacker creates himself a temporary authenticated credential injected to login
 
